@@ -33,7 +33,7 @@ The first thing we need is to flash your device
 
 To do so just run this command :
 
-`python esptool --port /dev/ttyUSB0 write_flash 0x00000 /path/to/your/build.bin`
+`python esptool.py --port /dev/ttyUSB0 write_flash 0x00000 /path/to/your/build.bin`
 
 You should have an output like :
 ```
@@ -77,6 +77,71 @@ lua: cannot open init.lua
 
 Don't mind about the scrap on first lines, it doesn't matter :smile:
 
-What we can see is that I did not should to activate SSL, I have 11 modules included, and we're using Lua 5.1.4
+What we can see is that I did not choose to activate SSL, I have 11 modules included, and we're using Lua 5.1.4
 
+## Just do it
 
+The last thing you need to know is how to code on it
+
+As I told you, NodeMCU has a Lua interpreter so, just as any script languages, you have 2 options :
+
+ - Write your code directly on the `screen` input, but that's not really awesome...
+ - Write a file on your NodeMCU to make it execute automatically
+
+Well, as you can see you don't have any file explorer, neither text editor on your NodeMCU
+
+That's what about LuaTool will help you, instead of asking your NodeMCU to write down in a file your code line by line at hand, we'll use LuaTool, which automate this annoying steps for us
+
+We'll use it this way :
+`python luatool.py --port /dev/ttyUSB0 --src myScript.lua --dest myScript.lua`
+
+ - `--dest myScript.lua` is optionnal, by default `--src` argument will be used
+
+You should have an output like this :
+```
+./luatool.py --port /dev/ttyUSB0 --src buzzer.lua 
+
+->file.open("buzzer.lua", "w") -> ok
+->file.close() -> ok
+->file.remove("buzzer.lua") -> ok
+->file.open("buzzer.lua", "w+") -> ok
+->file.writeline([==[buzzerPin = 5]==]) -> ok
+->file.writeline([==[gpio.mode(buzzerPin, gpio.OUTPUT)]==]) -> ok
+->file.writeline([==[]==]) -> ok
+->file.writeline([==[tones = {}]==]) -> ok
+
+...
+
+->file.writeline([==[beep(buzzerPin, "aS", 100)]==]) -> ok
+->file.writeline([==[end]==]) -> ok
+->file.writeline([==[]==]) -> ok
+->file.writeline([==[tmr.alarm(0, 1000, 1, function() play() end )]==]) -> ok
+->file.flush() -> ok
+->file.close() -> ok
+--->>> All done <<<---
+
+```
+
+I used my `buzzer.lua` script for this example, you will found it [here](https://github.com/Hydhen/NodeMCU/blob/master/Buzzer/buzzer.lua)
+
+Once you're done, just `screen` on your NodeMCU and use the `dofile` function :
+```
+> dofile("buzzer.lua")
+> Frequency:523
+Frequency:659
+Frequency:880
+Frequency:523
+Frequency:659
+Frequency:880
+...
+```
+
+As my script is looping using `tmr.alarm()` it will never end until you restart your NodeMCU or unplug the cable
+
+## It's over
+
+That's all for this brief overview of the NodeMCU
+
+Do not hesitate if you have any suggestion or improvment to this document
+
+Enjoy :smiley:
