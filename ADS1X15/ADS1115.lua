@@ -40,8 +40,24 @@ function readRegister(address, reg)
 
     i2c.start(0)
     i2c.address(0, address, i2c.RECEIVER)
-    ret = i2c.read(0, 2)
+    local all = i2c.read(0, 2)
     i2c.stop(0)
+
+
+    local a = string.byte(all)
+    if a == nil then
+        a = 0
+    end
+
+    local b = string.byte(all, 2)
+    if b == nil then
+        b = 0
+    end
+
+    local ret = 0
+    ret = bit.bor(ret, a)
+    ret = bit.lshift(ret, 8)
+    ret = bit.bor(ret, b)
 
     return ret
 end
@@ -50,10 +66,10 @@ function writeRegister(address, reg, value)
     i2c.start(0)
     i2c.address(0, address, i2c.TRANSMITTER)
     i2c.write(0, reg)
-    high = 0
+    local high = 0
     high = bit.rshift(value, 8)
     i2c.write(0, high)
-    low = 0
+    local low = 0
     low = bit.band(0xFF)
     i2c.write(0, low)
     i2c.stop(0)
@@ -66,7 +82,7 @@ function readADC_SingleEnded(channel)
     end
 
 
-    config = 0
+    local config = 0
     config = bit.bor(config, ADS1015_REG_CONFIG_CQUE_NONE)
     config = bit.bor(config, ADS1015_REG_CONFIG_CLAT_NONLAT)
     config = bit.bor(config, ADS1015_REG_CONFIG_CPOL_ACTVLOW)
@@ -90,9 +106,7 @@ function readADC_SingleEnded(channel)
 
     tmr.delay(ADS1115_CONVERTIONDELAY)
 
-    ret = readRegister(ADDR, ADS1015_REG_POINTER_CONVERT)
-
-    print (ret)
+    local ret = readRegister(ADDR, ADS1015_REG_POINTER_CONVERT)
 
     return ret
 end
@@ -101,13 +115,23 @@ print('I2C_SETUP...')
 i2c.setup(0, SDA, SCL, i2c.SLOW)
 print('SET UP')
 
-function accelerometer()
-    a = readADC_SingleEnded(0)
-    b = readADC_SingleEnded(1)
-    c = readADC_SingleEnded(2)
+function main()
+    local a = readADC_SingleEnded(0)
+    if a == nil then
+        a = 0
+    end
+    local b = readADC_SingleEnded(1)
+    if b == nil then
+        b = 0
+    end
+    local c = readADC_SingleEnded(2)
+    if c == nil then
+        c = 0
+    end
+    print("--------")
     print("1: " .. a)
     print("2: " .. b)
     print("3: " .. c)
 end
 
-tmr.alarm(0, 1000, 1, function() accelerometer() end )
+tmr.alarm(0, 1000, 1, function() main() end )
