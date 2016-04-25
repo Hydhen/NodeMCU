@@ -145,3 +145,40 @@ That's all for this brief overview of the NodeMCU
 Do not hesitate if you have any suggestion or improvment to this document
 
 Enjoy :smiley:
+
+## Bonus :
+
+Here you'll find some tips and tricks you may discover about Lua interpreter or the NodeMCU itself
+
+### `print()` function :
+
+In your Lua shell, to print a result you mostly use the `print()` function, but we have a shorter way to do the same thing
+
+Here is an example of the `print()` function :
+
+```
+> number = 42
+> string = "Hello, world!"
+> addition = add(40,2)
+> print(number)
+42
+> print(string)
+Hello, world!
+> print(addition)
+42
+> print(number .. ' ' .. string .. ' ' .. addition)
+42 Hello, world! 42
+```
+
+And you can use the shortcut `=` :
+
+```
+> = number
+42
+> = string
+Hello, world!
+> = add(1,2)
+3
+> = number .. string .. add(1,2)
+42Hello, world!3
+```
