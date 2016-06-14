@@ -28,6 +28,8 @@ If you're on **Windows** you will have to use one like [PuTTY](http://www.putty.
 
 Otherwise, we'll use the `screen` package
 
+For **MacOS** users you don't have to done much more, simply install this little [driver](http://raysfiles.com/drivers/ch341ser_mac.zip) (direct download) and you'll be ready to roll out !
+
 ## Getting started
 The first thing we need is to flash your device
 
