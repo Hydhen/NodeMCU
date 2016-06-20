@@ -29,7 +29,7 @@ If you're on **Windows** you will have to use one like [PuTTY](http://www.putty.
 Otherwise, we'll use the `screen` package
 
 For **MacOS** users you don't have to done much more, simply install this little [driver](http://raysfiles.com/drivers/ch341ser_mac.zip) (direct download) and you'll be ready to roll out !
->> You may have some difficulties to upload code to your Node with MacOS, care to unplug and plug your device again before sending data, don't hesitate to send it multiple times I can't say why but sometimes it fail for nothing on MacOS
+>> When connecting your device to your Mac, you should have 2 more devices in `/dev`, I made a diff on my `/dev` of before and after connecting the node, I got `/dev/cu.XXXX` which I got issues and `/dev/tty.XXXX` which I no longer have any problem
 
 ## Getting started
 The first thing we need is to flash your device
